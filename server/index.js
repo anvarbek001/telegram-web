@@ -18,13 +18,29 @@ const bootstrap = () => {
                             {
                                 text:'Kurslarni korish',
                                 web_app:{
-                                    url:'https://sammi.ac',
+                                    url:'https://telegram-web-bot-two.vercel.app/',
                                 }
                             }
                         ]
                     ]
                 }}
             );
+        }
+
+        if(msg.web_app_data?.data){
+            try {
+                const data = JSON.parse(msg.web_app_data?.data)
+
+                await bot.sendMessage(chatId,"Bizga ishonch bildirganingiz uchun raxmat!,siz sotib olgan kurslarning ro'yxati")
+
+                for(item of data){
+                    await bot.sendMessage(chatId,`${item.title} - ${item.quantity}`)
+                }
+
+                await bot.sendMessage(chatId,`Umumiy narx-${data.reduce((a,c) => a + c.price * c.quantity,0)}`)
+            } catch (error) {
+                console.log(error);
+            }
         }
     })
 }
